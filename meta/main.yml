@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Alex Teldekov
+  description: VPN server installation
+  company: T7G
+  license: BSD
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - xenial
+  categories:
+  - system
+dependencies: []
