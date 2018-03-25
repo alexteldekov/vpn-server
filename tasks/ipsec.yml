@@ -3,7 +3,7 @@
     name:
     - strongswan
     - strongswan-plugin-eap-mschapv2
-  state: latest
+    state: latest
 
 - name: configure strongswan
   template:

@@ -19,7 +19,7 @@
     name: postfix
     question: postfix/root_address
     vtype: string
-    value: alext@t7g.org
+    value: "{{ root_email }}"
 
 - name: configure postfix protocols
   debconf:
