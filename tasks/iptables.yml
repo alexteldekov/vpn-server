@@ -1,0 +1,28 @@
+- name: install iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: latest
+
+- name: configure iptables
+  template:
+    src: rules.v4.j2
+    dest: "/etc/iptables/rules.v4"
+    mode: 0640
+  notify:
+  - restart iptables
+
+- name: configure ip6tables
+  template:
+    src: rules.v6.j2
+    dest: "/etc/iptables/rules.v6"
+    mode: 0640
+  notify:
+  - restart iptables
+
+- name: accept ipv6 ra if forwarding is enabled
+  template:
+    src: accept_ra.j2
+    dest: "/etc/network/if-up.d/accept_ra"
+    mode: 0755
+  notify:
+  - accept ra

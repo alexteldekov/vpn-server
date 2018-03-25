@@ -1,0 +1,22 @@
+- name: install strongswan
+  apt:
+    name:
+    - strongswan
+    - strongswan-plugin-eap-mschapv2
+  state: latest
+
+- name: configure strongswan
+  template:
+    src: ipsec.conf.j2
+    dest: "/etc/ipsec.conf"
+    backup: yes
+  notify:
+  - restart ipsec
+
+- name: configure strongswan secrets
+  template:
+    src: ipsec.secrets.j2
+    dest: "/etc/ipsec.secrets"
+    mode: 0600
+  notify:
+  - restart ipsec

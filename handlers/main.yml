@@ -1,0 +1,11 @@
+- name: restart sshd
+  service: name=sshd state=restarted
+
+- name: restart iptables
+  command: 'netfilter-persistent start'
+
+- name: accept ra
+  shell: echo 2 > /proc/sys/net/ipv6/conf/eth0/accept_ra
+
+- name: restart ipsec
+  command: 'ipsec restart'

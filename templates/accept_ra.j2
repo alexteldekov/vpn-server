@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+if [ "$IFACE" = eth0 ] && [ "$ADDRFAM" = inet6 ]; then
+	echo 2 > /proc/sys/net/ipv6/conf/$IFACE/accept_ra
+fi
+

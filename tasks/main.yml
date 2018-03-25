@@ -1,0 +1,51 @@
+- name: configure sshd port
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Port '
+    line: 'Port 6022'
+  notify:
+  - restart sshd
+
+- name: configure sshd root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin '
+    line: 'PermitRootLogin without-password'
+  notify:
+  - restart sshd
+
+- name: configure postfix root_address
+  debconf:
+    name: postfix
+    question: postfix/root_address
+    vtype: string
+    value: alext@t7g.org
+
+- name: configure postfix protocols
+  debconf:
+    name: postfix
+    question: postfix/protocols
+    vtype: select
+    value: ipv4
+
+- name: install logwatch
+  apt:
+    name:
+    - debconf-utils
+    - bsd-mailx
+    - logwatch
+    state: latest
+    update_cache: yes
+
+- name: configure logwatch
+  template:
+    src: logwatch.conf.j2
+    dest: "/etc/logwatch/conf/logwatch.conf"
+    force: no
+    backup: yes
+
+- include_tasks: "iptables.yml"
+
+- include_tasks: "sysctl.yml"
+
+- include_tasks: "ipsec.yml"
