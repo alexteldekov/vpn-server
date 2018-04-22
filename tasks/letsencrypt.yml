@@ -8,3 +8,56 @@
     - dehydrated
     - lighttpd
     state: latest
+
+- name: create dehydrated directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: www-data
+    mode: 0775
+  with_items:
+    - '/etc/dehydrated'
+    - '/var/www/dehydrated'
+
+- name: create dehydrated config file
+  template:
+    src: config.j2
+    dest: "/etc/dehydrated/config"
+
+
+- name: create dehydrated domains.txt file
+  template:
+    src: domains.txt.j2
+    dest: "/etc/dehydrated/domains.txt"
+
+- name: configure lighttpd
+  template:
+    src: dehydrated.conf.j2
+    dest: "/etc/lighttpd/conf-enabled/dehydrated.conf"
+  notify:
+  - restart lighttpd
+
+- name: create dehydrated cron job
+  template:
+    src: cron_dehydrated.j2
+    dest: "/etc/cron.daily/dehydrated"
+    mode: 0755
+
+- name: create dehydrated hook
+  template:
+    src: hook.sh.j2
+    dest: "/etc/dehydrated/hook.sh"
+    mode: 0755
+
+- name: create dehydrated sudoers entry
+  template:
+    src: sudoers_dehydrated.j2
+    dest: "/etc/sudoers.d/dehydrated"
+    mode: 0440
+
+- name: dehydrated registration
+  shell: sudo -u www-data dehydrated --register --accept-terms
+
+- name: dehydrated first run
+  shell: /etc/cron.daily/dehydrated

@@ -9,3 +9,6 @@
 
 - name: restart ipsec
   command: 'ipsec restart'
+
+- name: restart lighttpd
+  service: name=lighttpd state=restarted

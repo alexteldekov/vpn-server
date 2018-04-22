@@ -1,0 +1,5 @@
+#!/bin/sh
+/sbin/iptables -I INPUT 1 -p tcp -m tcp --dport 80 -j ACCEPT
+date >>/var/log/lighttpd/dehydrated.log
+sudo -u www-data /usr/sbin/dehydrated --cron --hook /etc/dehydrated/hook.sh >>/var/log/lighttpd/dehydrated.log
+/sbin/iptables -D INPUT -p tcp --dport 80 -j ACCEPT

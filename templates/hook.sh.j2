@@ -1,0 +1,18 @@
+#!/bin/sh
+
+HANDLER="${1}"
+DOMAIN="${2}"
+KEYFILE="${3}"
+CERTFILE="${4}"
+FULLCHAINFILE="${5}"
+CHAINFILE="${6}"
+TIMESTAMP="${7}"
+
+case "$HANDLER" in
+  "deploy_cert")
+    sudo cp "$KEYFILE" /etc/ipsec.d/private/vpn-server-key.pem
+    sudo cp "$FULLCHAINFILE" /etc/ipsec.d/certs/vpn-server-cert.pem
+    sudo cp "$CHAINFILE" /etc/ipsec.d/cacerts/
+    sudo /usr/sbin/ipsec restart
+    ;;
+esac

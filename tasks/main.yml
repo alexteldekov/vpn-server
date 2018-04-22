@@ -2,7 +2,8 @@
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^Port '
-    line: 'Port 6022'
+#    line: 'Port 6022'
+    line: 'Port 22'
   notify:
   - restart sshd
 
@@ -28,12 +29,13 @@
     vtype: select
     value: ipv4
 
-- name: install logwatch
+- name: install useful packages
   apt:
     name:
     - debconf-utils
     - bsd-mailx
     - logwatch
+    - fail2ban
     state: latest
     update_cache: yes
 
