@@ -1,0 +1,3 @@
+Cmnd_Alias CP_CMD = /bin/cp /etc/dehydrated/certs/* /etc/ipsec.d/*
+Cmnd_Alias IPSEC_CMD = /usr/sbin/ipsec restart
+www-data ALL=(root) NOPASSWD: CP_CMD,IPSEC_CMD
