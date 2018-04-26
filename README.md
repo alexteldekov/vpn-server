@@ -19,3 +19,4 @@ $ cat <EOF >vpn-server.yml
 EOF
 $ ansible-playbook vpn-server.yml -l hostname
 ```
+Based on https://github.com/Nyr/openvpn-install
