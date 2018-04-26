@@ -7,7 +7,7 @@
     path: /etc/ssh/sshd_config
     regexp: '^Port '
     line: 'Port 6022'
-    line: 'Port 22'
+    #line: 'Port 22'
   notify:
   - restart sshd
 
