@@ -1,0 +1,39 @@
+port 443
+proto tcp-server
+dev tun
+sndbuf 0
+rcvbuf 0
+ca "{{ easyrsa_dir }}/keys/ca.crt"
+cert "{{ easyrsa_dir }}/keys/server.crt"
+key "{{ easyrsa_dir }}/keys/server.key"
+dh "{{ easyrsa_dir }}/keys/dh2048.pem"
+auth SHA512
+tls-auth ta.key 0
+topology subnet
+server 10.8.2.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+push "redirect-gateway def1 bypass-dhcp"
+#
+# 1.1.1.1
+push "dhcp-option DNS 1.1.1.1"
+push "dhcp-option DNS 1.0.0.1"
+# Google
+#push "dhcp-option DNS 8.8.8.8"
+#push "dhcp-option DNS 8.8.4.4"
+# OpenDNS
+#push "dhcp-option DNS 208.67.222.222"
+#push "dhcp-option DNS 208.67.220.220"
+# Verisign
+#push "dhcp-option DNS 64.6.64.6"
+#push "dhcp-option DNS 64.6.65.6"
+#
+keepalive 10 120
+cipher AES-256-CBC
+comp-lzo
+#user nobody
+#group nogroup
+persist-key
+persist-tun
+status openvpn-status.log
+verb 3
+#crl-verify "{{ easyrsa_dir }}/keys/crl.pem"

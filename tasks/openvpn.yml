@@ -1,0 +1,72 @@
+- name: install openvpn
+  apt:
+    name:
+    - openvpn
+    - easy-rsa
+    state: latest
+
+- name: configure openvpn server
+  template:
+    src: openvpn_server.conf.j2
+    dest: "/etc/openvpn/server.conf"
+  notify:
+  - restart openvpn
+
+- name: configure openvpn client template
+  template:
+    src: openvpn_client.txt.j2
+    dest: "/etc/openvpn/client-common.txt"
+
+- name: make cadir
+  shell: make-cadir "{{ easyrsa_dir }}"
+  args:
+    creates: "{{ easyrsa_dir }}"
+
+- name: clean all
+  shell: ( source ./vars && ./clean-all )
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa_dir }}"
+    creates: "{{ easyrsa_dir }}/keys/index.txt"
+
+- name: build-dh
+  shell: ( source ./vars && ./build-dh )
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa_dir }}"
+    creates: "{{ easyrsa_dir }}/keys/dh2048.pem"
+  notify:
+  - restart openvpn
+
+- name: pkitool initca
+  shell: ( source ./vars && ./pkitool --initca )
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa_dir }}"
+    creates: "{{ easyrsa_dir }}/keys/ca.key"
+  notify:
+  - restart openvpn
+
+- name: pkitool server
+  shell: ( source ./vars && ./pkitool --server server )
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa_dir }}"
+    creates: "{{ easyrsa_dir }}/keys/server.key"
+  notify:
+  - restart openvpn
+
+- name: openvpn genkey
+  shell: openvpn --genkey --secret ta.key
+  args:
+    chdir: /etc/openvpn
+    creates: /etc/openvpn/ta.key
+  notify:
+  - restart openvpn
+
+- name: copy make_client.sh script
+  template:
+    src: make_client.sh.j2
+    dest: "/etc/openvpn/make_client.sh"
+    mode: 0700
+

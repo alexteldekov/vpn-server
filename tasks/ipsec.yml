@@ -20,3 +20,12 @@
     mode: 0600
   notify:
   - restart ipsec
+
+- name: configure strongswan kernel ipsec
+  lineinfile:
+    path: /etc/strongswan.d/charon/kernel-libipsec.conf
+    regexp: 'load = no'
+    line: 'load = yes'
+  notify:
+  - restart ipsec
+
