@@ -20,11 +20,11 @@ conn ikev2-vpn
     leftid=@{{ inventory_hostname }}
     leftcert=/etc/ipsec.d/certs/vpn-server-cert.pem
     leftsendcert=always
-    leftsubnet=0.0.0.0/0;::/0
+    leftsubnet=0.0.0.0/0,::/0
     right=%any
     rightid=%any
     rightauth=eap-mschapv2
     rightdns=8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844
-    rightsourceip=10.10.10.0/24,fc00::/7
+    rightsourceip=10.10.10.0/24,fc00::/64
     rightsendcert=never
     eap_identity=%identity
