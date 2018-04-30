@@ -4,12 +4,15 @@
 :OUTPUT ACCEPT [0:0]
 -A INPUT -i lo -j ACCEPT
 -A INPUT -i tun+ -j ACCEPT
--A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
--A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
--A INPUT -p tcp -m tcp --dport 6022 -j ACCEPT
--A INPUT -p udp -m udp --dport 500 -j ACCEPT
--A INPUT -p udp -m udp --dport 4500 -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p esp -j ACCEPT
+-A INPUT -p ah -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -p udp --dport 500 -j ACCEPT
+-A INPUT -p udp --dport 4500 -j ACCEPT
+-A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+-A INPUT -p tcp --dport 6022 -m conntrack --ctstate NEW -j ACCEPT
+-A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT
 -A INPUT -j DROP
 -A FORWARD -s {{ vpn_network }} -m policy --dir in --pol ipsec --proto esp -j ACCEPT
 -A FORWARD -d {{ vpn_network }} -m policy --dir out --pol ipsec --proto esp -j ACCEPT
