@@ -8,8 +8,8 @@ openvpn_netmask: '255.255.255.0'
 openvpn_network_v6: 'fc00:1::/64'
 home_network: '192.168.0.0'
 home_netmask: '255.255.0.0'
-home_hetwork_v6: '2001:470:6d:179::/64'
-home2_hetwork_v6: '2001:470:28:27c::/64'
+home_network_v6: '2001:470:6d:179::/64'
+home2_network_v6: '2001:470:28:27c::/64'
 
 user1: !vault |
           $ANSIBLE_VAULT;1.1;AES256
