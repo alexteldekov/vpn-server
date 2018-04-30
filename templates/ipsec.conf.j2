@@ -25,6 +25,6 @@ conn ikev2-vpn
     rightid=%any
     rightauth=eap-mschapv2
     rightdns=8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844
-    rightsourceip=10.10.10.0/24,fc00::/64
+    rightsourceip={{ vpn_network }},{{ vpn_network_v6 }}
     rightsendcert=never
     eap_identity=%identity

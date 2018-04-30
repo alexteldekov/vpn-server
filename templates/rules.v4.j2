@@ -2,17 +2,17 @@
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
--A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
 -A INPUT -i tun+ -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 6022 -j ACCEPT
--A INPUT -i lo -j ACCEPT
 -A INPUT -p udp -m udp --dport 500 -j ACCEPT
 -A INPUT -p udp -m udp --dport 4500 -j ACCEPT
 -A INPUT -j DROP
--A FORWARD -s 10.10.10.0/24 -m policy --dir in --pol ipsec --proto esp -j ACCEPT
--A FORWARD -d 10.10.10.0/24 -m policy --dir out --pol ipsec --proto esp -j ACCEPT
+-A FORWARD -s {{ vpn_network }} -m policy --dir in --pol ipsec --proto esp -j ACCEPT
+-A FORWARD -d {{ vpn_network }} -m policy --dir out --pol ipsec --proto esp -j ACCEPT
 -A FORWARD -i tun+ -o eth0 -j ACCEPT
 -A FORWARD -i eth0 -o tun+ -j ACCEPT
 -A FORWARD -j DROP
@@ -23,10 +23,10 @@ COMMIT
 :INPUT ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
--A POSTROUTING -s 10.10.10.0/24 -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
--A POSTROUTING -s 10.10.10.0/24 -o eth0 -j MASQUERADE
--A POSTROUTING -s 10.8.0.0/16 -o eth0 -j MASQUERADE
--A POSTROUTING -s 192.168.0.0/16 -o eth0 -j MASQUERADE
+-A POSTROUTING -s {{ vpn_network }} -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
+-A POSTROUTING -s {{ vpn_network }} -o eth0 -j MASQUERADE
+-A POSTROUTING -s {{ openvpn_network }}/{{ openvpn_netmask }} -o eth0 -j MASQUERADE
+-A POSTROUTING -s {{ home_network }}/{{ home_netmask }} -o eth0 -j MASQUERADE
 COMMIT
 
 *mangle
@@ -35,5 +35,5 @@ COMMIT
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
--A FORWARD -s 10.10.10.0/24 -o eth0 -p tcp -m policy --dir in --pol ipsec -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360
+-A FORWARD -s {{ vpn_network }} -o eth0 -p tcp -m policy --dir in --pol ipsec -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360
 COMMIT

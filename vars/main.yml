@@ -1,6 +1,16 @@
 easyrsa_dir: '/etc/openvpn/easyrsa'
 root_email: 'alext@t7g.org'
 
+vpn_network: '10.10.10.0/24'
+vpn_network_v6: 'fc00::/64'
+openvpn_network: '10.8.2.0'
+openvpn_netmask: '255.255.255.0'
+openvpn_network_v6: 'fc00:1::/64'
+home_network: '192.168.0.0'
+home_netmask: '255.255.0.0'
+home_hetwork_v6: '2001:470:6d:179::/64'
+home2_hetwork_v6: '2001:470:28:27c::/64'
+
 user1: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           64396235393166363561623832333631356235623030643063346533386439613863396565623364
