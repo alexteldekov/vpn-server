@@ -70,3 +70,18 @@
     dest: "/etc/openvpn/make_client.sh"
     mode: 0700
 
+- name: create ccd directory
+  file:
+    path: "{{ ccd_dir }}"
+    state: directory
+    owner: root
+
+- name: create ccd files
+  template:
+    src: "{{ item }}"
+    dest: "{{ ccd_dir }}"
+  with_items:
+    - 'client1'
+    - 'client3'
+    - 'client4'
+

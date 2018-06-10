@@ -41,3 +41,8 @@ persist-tun
 status openvpn-status.log
 verb 3
 #crl-verify "{{ easyrsa_dir }}/keys/crl.pem"
+#
+push "{{ home_network }} {{ home_netmask }}"
+route {{ home_network }} {{ home_netmask }}
+client-config-dir "{{ ccd_dir }}"
+client-to-client

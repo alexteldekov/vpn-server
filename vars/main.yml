@@ -1,4 +1,5 @@
 easyrsa_dir: '/etc/openvpn/easyrsa'
+ccd_dir: '/etc/openvpn/ccd'
 root_email: 'alext@t7g.org'
 
 vpn_network: '10.10.10.0/24'
