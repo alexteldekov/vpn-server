@@ -6,14 +6,16 @@ rcvbuf 0
 ca "{{ easyrsa_dir }}/keys/ca.crt"
 cert "{{ easyrsa_dir }}/keys/server.crt"
 key "{{ easyrsa_dir }}/keys/server.key"
-dh "{{ easyrsa_dir }}/keys/dh2048.pem"
-auth SHA512
+dh "{{ easyrsa_dir }}/keys/dh{{ key_size }}.pem"
+#auth SHA512
 tls-auth ta.key 0
 topology subnet
 server {{ openvpn_network }} {{ openvpn_netmask }}
-server-ipv6 {{ openvpn_network_v6 }}
+# Tomato does not work with IPv6
+# http://tomatousb.org/forum/t-661995/openvpn-tunnel-doesn-t-work-with-ipv6
+#server-ipv6 {{ openvpn_network_v6 }}
 ifconfig-pool-persist ipp.txt
-push "redirect-gateway def1 bypass-dhcp"
+#push "redirect-gateway def1 bypass-dhcp"
 #push "route-ipv6 2000::/3"
 #
 # 1.1.1.1
@@ -22,8 +24,8 @@ push "redirect-gateway def1 bypass-dhcp"
 # Google
 push "dhcp-option DNS 8.8.8.8"
 push "dhcp-option DNS 8.8.4.4"
-push "dhcp-option DNS 2001:4860:4860::8888"
-push "dhcp-option DNS 2001:4860:4860::8844"
+#push "dhcp-option DNS 2001:4860:4860::8888"
+#push "dhcp-option DNS 2001:4860:4860::8844"
 # OpenDNS
 #push "dhcp-option DNS 208.67.222.222"
 #push "dhcp-option DNS 208.67.220.220"
@@ -32,7 +34,7 @@ push "dhcp-option DNS 2001:4860:4860::8844"
 #push "dhcp-option DNS 64.6.65.6"
 #
 keepalive 10 120
-cipher AES-256-CBC
+#cipher AES-256-CBC
 comp-lzo
 #user nobody
 #group nogroup
@@ -42,7 +44,7 @@ persist-tun
 verb 3
 #crl-verify "{{ easyrsa_dir }}/keys/crl.pem"
 #
-push "{{ home_network }} {{ home_netmask }}"
+push "route {{ home_network }} {{ home_netmask }}"
 route {{ home_network }} {{ home_netmask }}
 client-config-dir "{{ ccd_dir }}"
 client-to-client

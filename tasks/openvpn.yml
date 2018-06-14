@@ -22,6 +22,11 @@
   args:
     creates: "{{ easyrsa_dir }}"
 
+- name: set easyrsa vars
+  template:
+    src: easyrsa_vars.j2
+    dest: "{{ easyrsa_dir }}/vars"
+
 - name: clean all
   shell: ( source ./vars && ./clean-all )
   args:
@@ -34,7 +39,7 @@
   args:
     executable: /bin/bash
     chdir: "{{ easyrsa_dir }}"
-    creates: "{{ easyrsa_dir }}/keys/dh2048.pem"
+    creates: "{{ easyrsa_dir }}/keys/dh{{ key_size }}.pem"
   notify:
   - restart openvpn
 

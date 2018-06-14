@@ -1,6 +1,7 @@
 easyrsa_dir: '/etc/openvpn/easyrsa'
 ccd_dir: '/etc/openvpn/ccd'
 root_email: 'alext@t7g.org'
+key_size: '1024'
 
 vpn_network: '10.10.10.0/24'
 vpn_network_v6: 'fc00::/64'
