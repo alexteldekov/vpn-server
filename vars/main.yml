@@ -1,3 +1,5 @@
+openfire_ver: '4.2.3'
+
 easyrsa_dir: '/etc/openvpn/easyrsa'
 ccd_dir: '/etc/openvpn/ccd'
 root_email: 'alext@t7g.org'

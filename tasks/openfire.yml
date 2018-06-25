@@ -1,0 +1,8 @@
+- name: install java
+  apt:
+    name: openjdk-8-jre-headless
+    state: latest
+
+- name: install openfire
+  apt:
+    deb: "http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire_{{ openfire_ver }}_all.deb"

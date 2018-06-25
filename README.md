@@ -20,3 +20,13 @@ EOF
 $ ansible-playbook vpn-server.yml -l hostname
 ```
 Based on https://github.com/Nyr/openvpn-install
+
+## OpenFire
+
+`open http://jabber.$DOMAIN.TLD:9090`
+
+* hostname = jabber.$DOMAIN.$TLD, embedded DB.
+* Users/Groups - Users - Create New User
+* Plugins - Plugin Admin - Available Plugins - Kraken IM Gateway (+)
+* Server - Gateways - Transports - [V] ICQ - Options - Encoding: Windows-1251
+* Server - Gateways - Registrations - Add a new registration
