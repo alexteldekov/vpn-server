@@ -86,6 +86,7 @@
     src: "{{ item }}"
     dest: "{{ ccd_dir }}"
   with_items:
+    - 'client0'
     - 'client1'
     - 'client2'
     - 'client3'
