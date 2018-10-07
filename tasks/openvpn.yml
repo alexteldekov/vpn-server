@@ -12,6 +12,12 @@
   notify:
   - restart openvpn
 
+- name: create routes file if it does not exist
+  copy:
+    content: ""
+    dest: "/etc/openvpn/routes.inc"
+    force: no
+
 - name: configure openvpn client template
   template:
     src: openvpn_client.txt.j2
@@ -86,9 +92,36 @@
     src: "{{ item }}"
     dest: "{{ ccd_dir }}"
   with_items:
-    - 'client0'
     - 'client1'
-    - 'client2'
     - 'client3'
     - 'client4'
 
+- name: install libnet-cidr-lite-perl
+  apt:
+    name:
+    - libnet-cidr-lite-perl
+    state: latest
+
+- name: download iplist
+  get_url:
+    url: https://raw.githubusercontent.com/rpv-tomsk/iplist/master/iplist
+    dest: /usr/local/bin/iplist
+    mode: 0755
+
+- name: create iplist symlinks
+  file:
+    src: /usr/local/bin/iplist
+    dest: /usr/local/bin/{{ item }}
+    state: link
+  with_items:
+    - 'iplist_agg'
+    - 'iplist_diff'
+    - 'iplist_diffq'
+    - 'iplist_ovpn'
+    - 'iplist_quagga'
+
+- name: create update-routes script
+  copy:
+    content: "#!/bin/sh\nwget -qO - http://api.antizapret.info/group.php?data=ips | grep / | iplist_ovpn -vg > /etc/openvpn/routes.inc\nservice openvpn reload"
+    dest: /etc/cron.daily/update-routes
+    mode: 0755
