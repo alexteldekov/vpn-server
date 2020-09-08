@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Create the ipset list
+ipset create -exist china hash:net
+
+# remove any old list that might exist from previous runs of this script
+rm -f /tmp/cn-aggregated.zone
+
+# Pull the latest IP set for China
+wget -q -P /tmp http://www.ipdeny.com/ipblocks/data/aggregated/cn-aggregated.zone
+
+ipset flush china
+# Add each IP address from the downloaded list into the ipset 'china'
+for i in $(cat /tmp/cn-aggregated.zone ); do ipset -A china $i; done
+
+# Insert a rule
+iptables-save | grep -q china
+if [ "$?" -ne "0" ]; then
+  # if not exists, insert after -m conntrack or in the very beginning
+  LINENUM=`iptables -S INPUT | grep -n 'm conntrack' | head -1 | cut -d: -f1`
+  if [ "$LINENUM" = "" ]; then
+    LINENUM=1
+  fi
+  iptables -I INPUT $LINENUM -m set --match-set china src -j DROP
+fi
