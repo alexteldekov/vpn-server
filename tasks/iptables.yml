@@ -3,6 +3,11 @@
     name: iptables-persistent
     state: latest
 
+- name: install ipset
+  apt:
+    name: ipset
+    state: latest
+
 - name: configure iptables
   template:
     src: rules.v4.j2
