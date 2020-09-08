@@ -8,6 +8,12 @@
     name: ipset
     state: latest
 
+- name: block china
+  template:
+    src: block-china.j2
+    dest: "/etc/cron.daily/block-china"
+    mode: 0755
+
 - name: configure iptables
   template:
     src: rules.v4.j2
