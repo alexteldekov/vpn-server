@@ -21,6 +21,9 @@ $ ansible-playbook vpn-server.yml -l hostname
 ```
 Based on https://github.com/Nyr/openvpn-install
 
+Do not forget to add usernames and passwords to `/etc/ipsec.secrets`!
+Then run `ipsec restart` to apply them.
+
 ## OpenFire
 
 `open http://jabber.$DOMAIN.TLD:9090`

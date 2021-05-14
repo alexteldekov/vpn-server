@@ -2,7 +2,7 @@
   apt:
     name:
     - strongswan
-    - strongswan-plugin-eap-mschapv2
+    - libcharon-extra-plugins
     state: latest
 
 - name: configure strongswan
@@ -14,12 +14,16 @@
   - restart ipsec
 
 - name: configure strongswan secrets
-  template:
-    src: ipsec.secrets.j2
-    dest: "/etc/ipsec.secrets"
-    mode: 0600
+  lineinfile:
+    path: "/etc/ipsec.secrets"
+    line: "{{ inventory_hostname }} : RSA \"/etc/ipsec.d/private/vpn-server-key.pem\"" 
   notify:
   - restart ipsec
+
+- name: configure strongswan secrets 2
+  lineinfile:
+    path: "/etc/ipsec.secrets"
+    line: "#iPhone1 %any% : EAP \"Password1\""
 
 - name: configure strongswan kernel ipsec
   lineinfile:

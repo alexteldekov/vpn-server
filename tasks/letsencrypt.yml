@@ -1,6 +1,6 @@
 - name: install dehydrated ppa
   apt_repository:
-    repo: 'ppa:gslin/dehydrated'
+    repo: 'ppa:gslin/dehydrated-lite'
 
 - name: install dehydrated
   apt:
