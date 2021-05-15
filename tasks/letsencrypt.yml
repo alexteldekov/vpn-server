@@ -25,7 +25,6 @@
     src: config.j2
     dest: "/etc/dehydrated/config"
 
-
 - name: create dehydrated domains.txt file
   template:
     src: domains.txt.j2
@@ -58,6 +57,8 @@
 
 - name: dehydrated registration
   shell: sudo -u www-data dehydrated --register --accept-terms
+  args:
+    creates: /etc/dehydrated/accounts
 
 - name: dehydrated first run
   shell: /etc/cron.daily/dehydrated
